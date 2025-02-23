@@ -1,0 +1,11 @@
+# Environment variables
+**/.env
+.env.*/
+
+# Editor files
+**/.vscode
+**/.idea
+
+# Python files
+**/*.pyc
+**/__pycache__/
