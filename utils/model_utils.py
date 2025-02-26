@@ -1,6 +1,27 @@
+import torch
 from typing import Dict
-from model_config import tokens_config, temp_config
-from huggingface_hub import InferenceClient
+from transformers import AutoModelForCausalLM, AutoTokenizer 
+
+
+
+# Model to be used
+model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
+
+# Set max tokens and model temperature
+tokens_config = 3000
+temp_config = 0.6
+
+
+
+def load_model():
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16).to(device)
+
+    return tokenizer, model, device
+
+tokenizer, model, device = load_model()
 
 
 def get_details() -> Dict[str, str]:
@@ -23,24 +44,18 @@ def get_details() -> Dict[str, str]:
 
 def generate_prompt(details: Dict[str, str]) -> str:
 
-    prompt = f"""Analyze the feasibility a project to {details["project_type"]} in the {details["company_industry"]} industry with an investment of 
-{details["investment"]} in {details["countries"]}, in order to {details["project_goal"]}.
-
-Provide a summary of key considerations, risks, and opportunities.
-
-Ensure your response is less than 500 tokens (3000 characters).
-Avoid going super in-depth during your response, avoiding focus on only one key element and instead providing a birds-eye-view preliminary analysis.
-Avoid repeating information from this prompt in your response unless necessary to provide relevant context."""
+    prompt = f"""<think>\nAnalyze the feasibility of a project to {details['project_type']} in the {details['company_industry']} industry with an investment of {details['investment']} in {details['countries']}, aiming to {details['project_goal']}. 
+\nProvide a structured summary of key considerations, risks, and opportunities. 
+\nEnsure a balanced, high-level preliminary analysis rather than an overly detailed breakdown of any single factor.
+\nAvoid unnecessary repetition of this prompt’s details unless required for clarity. 
+\nPlease reason step by step, and put your final answer within \\boxed{{}}"""
 
     return prompt
 
 
-def call_llm(inference_client: InferenceClient, prompt: str) -> str:
-
-    response = inference_client.text_generation(
-        prompt,
-        max_new_tokens=tokens_config,
-        temperature=temp_config
-        )
+def call_llm(prompt: str) -> str:
     
-    return response
+    inputs = tokenizer(prompt, return_tensors="pt").to(device)
+    response = model.generate(**inputs, max_new_tokens=tokens_config, temperature=temp_config)
+
+    return tokenizer.decode(response[0], skip_special_tokens=True)
