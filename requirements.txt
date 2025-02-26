@@ -1,1 +1,4 @@
-huggingface_hub
+torch
+numpy
+numpy_financial
+transformers
