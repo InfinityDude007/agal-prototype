@@ -1,3 +1,5 @@
+### OLD CODE: INTENDED FOR USING HUGGINGFACE API ###
+"""
 import os
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
@@ -16,3 +18,4 @@ llm_client = InferenceClient(
 
 tokens_config = 1000
 temp_config = 0.4
+"""
