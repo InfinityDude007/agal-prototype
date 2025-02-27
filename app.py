@@ -1,4 +1,9 @@
-from utils.model_utils import get_details, generate_prompt, call_llm
+import os
+from utils.model_utils import get_details, generate_prompt, call_llm, model_response_to_md
+
+
+# Ignore Hugging Face Hub's symlinks caching and spda warnings
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
 print("\n\n---- AGAL Initial Prototype ----\n\n")
 
@@ -22,4 +27,6 @@ prompt = generate_prompt(test_details)
 
 model_response = call_llm(prompt)
 
-print(f"\n\nModel response: {model_response}\n\n")
+print(f"\nModel response: {model_response}\n")
+
+model_response_to_md(model_response)
