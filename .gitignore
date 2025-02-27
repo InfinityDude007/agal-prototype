@@ -6,9 +6,13 @@
 **/.vscode
 **/.idea
 
-# Python files
+# Python files and packages
 **/*.pyc
 **/__pycache__/
+**/package*.json
 
 # Miscellaneous
 **/.DS_Store
+
+# Model response files
+**/model_response*.md
