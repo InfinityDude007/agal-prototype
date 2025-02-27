@@ -55,7 +55,8 @@ def generate_prompt(details: Dict[str, str]) -> str:
 \nEnsure a balanced, high-level preliminary analysis rather than an overly detailed breakdown of any single factor.
 \nYou may refrence any financials provided within the promt, and use actual numerical values and financial data where appropriate.
 \nAvoid unnecessary repetition of this prompt’s details unless required for clarity. 
-\nPlease reason step by step, and put your final answer within \\boxed{{}}"""
+\nPlease reason step by step, and put your final answer within \\boxed{{}}
+\n</think>"""
 
     return prompt
 
