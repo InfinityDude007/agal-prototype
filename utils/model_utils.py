@@ -53,7 +53,7 @@ def generate_prompt(details: Dict[str, str]) -> str:
     prompt = f"""<think>\nAnalyze the feasibility of a project to {details['project_type']} in the {details['company_industry']} industry with an investment of {details['investment']} in {details['countries']}, aiming to {details['project_goal']}. 
 \nProvide a structured summary of key considerations, risks, and opportunities. 
 \nEnsure a balanced, high-level preliminary analysis rather than an overly detailed breakdown of any single factor.
-\nYou may refrence any financials provided within the promt, and use actual numerical values and financial data where appropriate.
+\nYou may reference any financials provided within the prompt, and use actual numerical values and financial data where appropriate.
 \nAvoid unnecessary repetition of this prompt’s details unless required for clarity. 
 \nPlease reason step by step, and put your final answer within \\boxed{{}}
 \n</think>"""
