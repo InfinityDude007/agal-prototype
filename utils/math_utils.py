@@ -1,21 +1,22 @@
 import numpy as np
 from numpy_financial import irr
 
+
 def calculate_npv(discount_rate, cash_flows):
-     npv = np.npv(discount_rate, cash_flows[1:]) + cash_flows[0]
-     return npv
- 
+    npv = np.npv(discount_rate, cash_flows[1:]) + cash_flows[0]
+    return npv
+
 
 def calculate_irr(cash_flows):
     return irr(cash_flows) 
- 
- 
+
+
 def calculate_payback_period(initial_investment, cash_flows):
     cumulative = 0
     for i, cf in enumerate(cash_flows, 1):
         cumulative += cf
         if cumulative >= initial_investment:
-            return i - 1 + (initial_investment - (cumulative - cf)) / cf  # Fractional year calculation
+            return i - 1 + (initial_investment - (cumulative - cf)) / cf
     
     return None
 
