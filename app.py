@@ -26,6 +26,6 @@ test_details = ProjectDetails(
 
 prompt = generate_prompt(test_details)
 
-model_response, response_time = call_llm(prompt)
+model_response = call_llm(prompt)
 
-model_response_to_md(model_response, response_time)
+model_response_to_md(model_response)
