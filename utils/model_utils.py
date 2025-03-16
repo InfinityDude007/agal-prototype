@@ -15,7 +15,7 @@ temp_config = 0.6
 
 def load_model():
     
-    print(f"\nModel: {model_name.split("/")[1]}\nLoading model...\n")
+    print(f"\nModel: {model_name.split('/')[1]}\nLoading model...\n")
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
     tokenizer = AutoTokenizer.from_pretrained(model_name)   
