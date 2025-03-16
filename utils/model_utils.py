@@ -62,7 +62,7 @@ def load_model():
     elapsed_time_thread.daemon = True
     elapsed_time_thread.start()
 
-    time.sleep(6)
+    time.sleep(10)
     os.system("cls" if os.name == "nt" else "clear")
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model on {device.upper()}...\n")
 
