@@ -1,4 +1,5 @@
 import os
+from schema.model_schema import ProjectDetails
 from utils.model_utils import get_details, generate_prompt, call_llm, model_response_to_md
 
 
@@ -14,13 +15,13 @@ details = get_details()
 
 ### DICTIONARY FOR TESTING ONLY ###
 
-test_details = {
-    "project_type": "build a new factory",
-    "project_goal": "increase revenue, production capacity, outreach and market share",
-    "company_industry": "electric vehicles, mainly cars",
-    "investment": "5,000,000,000 euros",
-    "countries": "France, Germany, or USA"
-}
+test_details = ProjectDetails(
+    project_type="build a new factory",
+    project_goal="increase revenue, production capacity, outreach and market share",
+    company_industry="electric vehicles, mainly cars",
+    investment="5,000,000,000 euros",
+    countries="France, Germany, or USA"
+)
 
 
 prompt = generate_prompt(test_details)
