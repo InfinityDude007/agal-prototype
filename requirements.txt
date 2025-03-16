@@ -1,5 +1,4 @@
 numpy
 torch
-torch_xla
 transformers
 numpy_financial

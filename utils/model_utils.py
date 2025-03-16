@@ -6,11 +6,7 @@ import threading
 from typing import Dict
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# Available by default on Google Collab's v2-8 TPU
-import torch_xla # type: ignore 
-import torch_xla.core.xla_model as xm # type: ignore
-
-# Suppress cuDNN/cuBLAS warnings and optimise GPU usage
+# Suppress cuDNN/cuBLAS warnings and optimize GPU usage
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
@@ -23,6 +19,8 @@ model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
 tokens_config = 1200
 temp_config = 0.6
 
+# Check if GPU is available and set device
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def update_elapsed_time(start_time, stop_event):
@@ -36,7 +34,7 @@ def update_elapsed_time(start_time, stop_event):
 
 
 def load_model():
-    print(f"\nModel: {model_name.split('/')[1]}\nLoading model...\n")
+    print(f"\nModel: {model_name.split('/')[1]}\nLoading model on {device.upper()}...\n")
     start_time = time.time()
 
     stop_event = threading.Event()
@@ -44,26 +42,18 @@ def load_model():
     elapsed_time_thread.daemon = True
     elapsed_time_thread.start()
 
-    device = xm.xla_device()
-    tokenizer = AutoTokenizer.from_pretrained(model_name)   
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        torch_dtype=torch.float16,
-        device_map="auto"
+        torch_dtype=torch.float16 if device == "cuda" else torch.float32
     ).to(device)
 
     stop_event.set()
     elapsed_time_thread.join()
 
-    return tokenizer, model, device
+    return tokenizer, model
 
-
-
-# Empty GPU/TPU caches and check if TPU is available before loading the model
-torch.cuda.empty_cache()
-torch.cuda.init()
-torch_xla.core.xla_model.xla_device()
-tokenizer, model, device = load_model()
+tokenizer, model = load_model()
 
 
 
@@ -71,7 +61,7 @@ def get_details() -> Dict[str, str]:
 
     print("Enter project details\n\n")
     project_type = input("Project type: ")
-    project_goal= input("Project goal: ")
+    project_goal = input("Project goal: ")
     company_industry = input("Industry: ")
     investment = input("Investment amount: ")
     countries = input("Short listed countries: ")
@@ -125,7 +115,7 @@ def call_llm(prompt: str) -> str:
 
 
 def model_response_to_md(model_response: str, elapsed_time: float):
-
+    
     cleaned_response = "**Model Response**\n-\n" + model_response.split("</think>")[1]
     minutes, seconds = divmod(elapsed_time, 60)
     time_string = f"**Response Time:** {int(minutes):02}:{int(seconds):02}"
