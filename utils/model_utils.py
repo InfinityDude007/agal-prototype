@@ -55,8 +55,12 @@ def update_elapsed_time(start_time, stop_event):
 
 def load_model():
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model on {device.upper()}...\n")
-    start_time = time.time()
+    
+    time.sleep(6)
+    os.system("cls" if os.name == "nt" else "clear")
+    print(f"\nModel: {model_name.split('/')[1]}\nLoading model on {device.upper()}...\n")
 
+    start_time = time.time()
     stop_event = threading.Event()
     elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time, stop_event))
     elapsed_time_thread.daemon = True
