@@ -69,12 +69,14 @@ def load_model():
     ).to(device)
 
     stop_event.set()
+    elapsed_time_thread.join()
 
-    time.sleep(5)
+    elapsed_time = (time.time() - start_time) - 1
     os.system("cls" if os.name == "nt" else "clear")
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model on {device.upper()}...\n")
-    
-    elapsed_time_thread.join()
+    minutes, seconds = divmod(elapsed_time, 60)
+    sys.stdout.write(f"\rTime Elapsed: {int(minutes):02}:{int(seconds):02}")
+
 
     return tokenizer, model
 
