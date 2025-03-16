@@ -153,13 +153,17 @@ def call_llm(generated_prompt: GeneratedPrompt) -> ModelResponse:
 
 def model_response_to_md(model_response: ModelResponse):
     
-    cleaned_response = "## Model Response\n" + (model_response.response).split("</think>")[1]
+    if "</think>" in model_response.response:
+        cleaned_response = "## Model Response\n" + model_response.response.split("</think>", 1)[1]
+    else:
+        cleaned_response = "## Model Response\n" + model_response.response
+
     minutes, seconds = divmod(model_response.time_elapsed, 60)
     time_string = f"# Response Time: {int(minutes):02}:{int(seconds):02}"
     
     file_name = "model_response.md"
 
     with open(file_name, "w") as file:
-        file.write(f"{time_string}\n-\n\n{cleaned_response}")
+        file.write(f"{time_string}\n\n{cleaned_response}")
 
     print(f"\n{file_name} has been updated with the cleaned model response and response time\n")
