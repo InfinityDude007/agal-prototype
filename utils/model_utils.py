@@ -1,6 +1,8 @@
 import os
 
 # Suppress cuDNN/cuBLAS warnings and optimise GPU usage
+os.environ["GRPC_VERBOSITY"] = "ERROR"
+os.environ["GLOG_minloglevel"] = "2"
 os.environ["CUDA_MODULE_LOADING"] = "LAZY"
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
@@ -144,7 +146,7 @@ def call_llm(generated_prompt: GeneratedPrompt) -> ModelResponse:
 
     return ModelResponse(
         response=tokenizer.decode(response[0], skip_special_tokens=True),
-        time_elapsed=time.time() - start_time
+        time_elapsed=(time.time() - start_time) - 1
     )
 
 
@@ -156,12 +158,12 @@ def call_llm(generated_prompt: GeneratedPrompt) -> ModelResponse:
 def model_response_to_md(model_response: ModelResponse):
     
     if "</think>" in model_response.response:
-        cleaned_response = "## Model Response\n" + model_response.response.split("</think>", 1)[1]
+        cleaned_response = "# Model Response\n" + model_response.response.split("</think>", 1)[1]
     else:
-        cleaned_response = "## Model Response\n" + model_response.response
+        cleaned_response = "# Model Response\n" + model_response.response
 
     minutes, seconds = divmod(model_response.time_elapsed, 60)
-    time_string = f"# Response Time: {int(minutes):02}:{int(seconds):02}"
+    time_string = f"## Response Time: {int(minutes):02}:{int(seconds):02}"
     
     file_name = "model_response.md"
 
