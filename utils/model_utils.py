@@ -1,6 +1,7 @@
 import sys
 import time
 import torch
+import threading
 from typing import Dict
 from transformers import AutoModelForCausalLM, AutoTokenizer 
 
@@ -15,9 +16,25 @@ temp_config = 0.6
 
 
 
+def update_elapsed_time(start_time):
+    while True:
+        elapsed_time = time.time() - start_time
+        minutes, seconds = divmod(elapsed_time, 60)
+        sys.stdout.write(f"\rTime Elapsed: {int(minutes):02}:{int(seconds):02}")
+        sys.stdout.flush()
+        time.sleep(1)
+
+
+
 def load_model():
     
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model...\n")
+
+    start_time = time.time()
+
+    elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time,))
+    elapsed_time_thread.daemon = True
+    elapsed_time_thread.start()
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
     tokenizer = AutoTokenizer.from_pretrained(model_name)   
@@ -26,6 +43,8 @@ def load_model():
         torch_dtype=torch.float16,
         device_map="auto"
     ).to(device)
+
+    elapsed_time_thread.join()
 
     return tokenizer, model, device
 
@@ -71,6 +90,10 @@ def call_llm(prompt: str) -> str:
     print("Awaiting model response...\n")
 
     start_time = time.time()
+
+    elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time,))
+    elapsed_time_thread.daemon = True
+    elapsed_time_thread.start()
     
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     response = model.generate(
@@ -80,24 +103,21 @@ def call_llm(prompt: str) -> str:
         pad_token_id=tokenizer.eos_token_id
     )
 
-    elapsed_time = time.time() - start_time
-    minutes, seconds = divmod(elapsed_time, 60)
-    sys.stdout.write(f"\rElapsed Time: {int(minutes):02}:{int(seconds):02}")
-    sys.stdout.flush()
+    elapsed_time_thread.join()
 
-    return tokenizer.decode(response[0], skip_special_tokens=True), elapsed_time
+    return tokenizer.decode(response[0], skip_special_tokens=True), time.time() - start_time
 
 
 
 def model_response_to_md(model_response: str, elapsed_time: float):
 
-    cleaned_response = "/**Model Response**/\n" + model_response.split("</think>")[1]
+    cleaned_response = "**Model Response**\n-\n" + model_response.split("</think>")[1]
     minutes, seconds = divmod(elapsed_time, 60)
-    time_string = f"Elapsed Time: {int(minutes):02}:{int(seconds):02}"
+    time_string = f"**Response Time:** {int(minutes):02}:{int(seconds):02}"
     
     file_name = "model_response.md"
 
     with open(file_name, "w") as file:
-        file.write(f"{time_string}\n\n{cleaned_response}")
+        file.write(f"**{time_string}**\n-\n\n{cleaned_response}")
 
-    print(f"{file_name} has been updated with the cleaned model response and elapsed time\n")
+    print(f"\n{file_name} has been updated with the cleaned model response and response time\n")
