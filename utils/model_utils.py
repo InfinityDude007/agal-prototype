@@ -15,7 +15,6 @@ import sys
 import time
 import torch
 import threading
-from IPython.display import clear_output
 from schema.model_schema import ProjectDetails, GeneratedPrompt, ModelResponse
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -57,8 +56,6 @@ def update_elapsed_time(start_time, stop_event):
 def load_model():
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model on {device.upper()}...\n")
 
-    sys.stderr = open(os.devnull, 'w')
-
     start_time = time.time()
     stop_event = threading.Event()
     elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time, stop_event))
@@ -73,11 +70,9 @@ def load_model():
 
     stop_event.set()
     elapsed_time_thread.join()
-
-    sys.stderr = sys.__stderr__
+    
     elapsed_time = (time.time() - start_time) - 1
-    clear_output(wait=True)
-    print(f"\nModel: {model_name.split('/')[1]}\Loaded model on {device.upper()}\n")
+    print(f"\nModel: {model_name.split('/')[1]}\nLoaded model on {device.upper()} ✅\n")
     minutes, seconds = divmod(elapsed_time, 60)
     sys.stdout.write(f"\rTime to Load: {int(minutes):02}:{int(seconds):02}")
 
@@ -181,4 +176,4 @@ def model_response_to_md(model_response: ModelResponse):
     with open(file_name, "w") as file:
         file.write(f"{time_string}\n\n{cleaned_response}")
 
-    print(f"\n{file_name} has been updated with the cleaned model response and response time\n")
+    print(f"\n{file_name} has been updated with the cleaned model response and response time ✅\n")
