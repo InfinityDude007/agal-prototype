@@ -1,4 +1,4 @@
-numpy==1.26.4
-numpy_financial==1.0.0
-torch==2.6.0
-transformers==4.48.3
+numpy
+numpy_financial
+torch
+transformers
