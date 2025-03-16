@@ -15,6 +15,7 @@ import sys
 import time
 import torch
 import threading
+from IPython.display import clear_output
 from schema.model_schema import ProjectDetails, GeneratedPrompt, ModelResponse
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -72,7 +73,7 @@ def load_model():
     elapsed_time_thread.join()
 
     elapsed_time = (time.time() - start_time) - 1
-    os.system("cls" if os.name == "nt" else "clear")
+    clear_output(wait=True)
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model on {device.upper()}...\n")
     minutes, seconds = divmod(elapsed_time, 60)
     sys.stdout.write(f"\rTime Elapsed: {int(minutes):02}:{int(seconds):02}")
