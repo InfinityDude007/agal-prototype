@@ -4,9 +4,14 @@ import time
 import torch
 import threading
 from typing import Dict
-from transformers import AutoModelForCausalLM, AutoTokenizer 
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Available by default on Google Collab's v2-8 TPU
+import torch_xla # type: ignore 
+import torch_xla.core.xla_model as xm # type: ignore
 
 # Suppress cuDNN/cuBLAS warnings and optimise GPU usage
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128' 
@@ -15,7 +20,7 @@ os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128'
 model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
 
 # Set max tokens and model temperature
-tokens_config = 800
+tokens_config = 1200
 temp_config = 0.6
 
 
@@ -30,7 +35,6 @@ def update_elapsed_time(start_time, stop_event):
 
 
 
-torch.cuda.empty_cache()
 def load_model():
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model...\n")
     start_time = time.time()
@@ -40,7 +44,7 @@ def load_model():
     elapsed_time_thread.daemon = True
     elapsed_time_thread.start()
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = xm.xla_device()
     tokenizer = AutoTokenizer.from_pretrained(model_name)   
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -53,6 +57,12 @@ def load_model():
 
     return tokenizer, model, device
 
+
+
+# Empty GPU/TPU caches and check if TPU is available before loading the model
+torch.cuda.empty_cache()
+torch.cuda.init()
+torch_xla.core.xla_model.xla_device()
 tokenizer, model, device = load_model()
 
 
@@ -123,6 +133,6 @@ def model_response_to_md(model_response: str, elapsed_time: float):
     file_name = "model_response.md"
 
     with open(file_name, "w") as file:
-        file.write(f"**{time_string}**\n-\n\n{cleaned_response}")
+        file.write(f"{time_string}\n-\n\n{cleaned_response}")
 
     print(f"\n{file_name} has been updated with the cleaned model response and response time\n")
