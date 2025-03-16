@@ -1,4 +1,14 @@
 import os
+
+# Suppress cuDNN/cuBLAS warnings and optimise GPU usage
+os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
+os.environ["SDPA_ALLOW_SLIDING_WINDOW"] = "1"
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128' 
+
 import sys
 import time
 import torch
@@ -8,14 +18,6 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 ###########################################################################################################################################################################################################################################
-
-
-# Suppress cuDNN/cuBLAS warnings and optimize GPU usage
-os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128' 
 
 
 # Model to be used
