@@ -1,3 +1,5 @@
+import sys
+import time
 import torch
 from typing import Dict
 from transformers import AutoModelForCausalLM, AutoTokenizer 
@@ -30,6 +32,7 @@ def load_model():
 tokenizer, model, device = load_model()
 
 
+
 def get_details() -> Dict[str, str]:
 
     print("Enter project details\n\n")
@@ -48,6 +51,7 @@ def get_details() -> Dict[str, str]:
     }
 
 
+
 def generate_prompt(details: Dict[str, str]) -> str:
 
     prompt = f"""<think>\nAnalyze the feasibility of a project to {details['project_type']} in the {details['company_industry']} industry with an investment of {details['investment']} in {details['countries']}, aiming to {details['project_goal']}. 
@@ -61,9 +65,12 @@ def generate_prompt(details: Dict[str, str]) -> str:
     return prompt
 
 
+
 def call_llm(prompt: str) -> str:
     
     print("Awaiting model response...\n")
+
+    start_time = time.time()
     
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     response = model.generate(
@@ -73,16 +80,24 @@ def call_llm(prompt: str) -> str:
         pad_token_id=tokenizer.eos_token_id
     )
 
-    return tokenizer.decode(response[0], skip_special_tokens=True)
+    elapsed_time = time.time() - start_time
+    minutes, seconds = divmod(elapsed_time, 60)
+    sys.stdout.write(f"\rElapsed Time: {int(minutes):02}:{int(seconds):02}")
+    sys.stdout.flush()
+
+    return tokenizer.decode(response[0], skip_special_tokens=True), elapsed_time
 
 
-def model_response_to_md(model_response: str):
+
+def model_response_to_md(model_response: str, elapsed_time: float):
 
     cleaned_response = "/**Model Response**/\n" + model_response.split("</think>")[1]
+    minutes, seconds = divmod(elapsed_time, 60)
+    time_string = f"Elapsed Time: {int(minutes):02}:{int(seconds):02}"
     
     file_name = "model_response.md"
 
     with open(file_name, "w") as file:
-        file.write(cleaned_response)
+        file.write(f"{time_string}\n\n{cleaned_response}")
 
-    print(f"{file_name} has been updated with the cleaned model response\n")
+    print(f"{file_name} has been updated with the cleaned model response and elapsed time\n")

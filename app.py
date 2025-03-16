@@ -25,8 +25,6 @@ test_details = {
 
 prompt = generate_prompt(test_details)
 
-model_response = call_llm(prompt)
+model_response, response_time = call_llm(prompt)
 
-print(f"\nModel response: {model_response}\n")
-
-model_response_to_md(model_response)
+model_response_to_md(model_response, response_time)
