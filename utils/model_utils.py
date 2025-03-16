@@ -72,7 +72,7 @@ def load_model():
     elapsed_time_thread.join()
     
     elapsed_time = (time.time() - start_time) - 1
-    print(f"\nModel: {model_name.split('/')[1]}\nLoaded model on {device.upper()} ✅\n")
+    print(f"\n\nModel: {model_name.split('/')[1]}\nLoaded model on {device.upper()} ✅\n")
     minutes, seconds = divmod(elapsed_time, 60)
     sys.stdout.write(f"\rTime to Load: {int(minutes):02}:{int(seconds):02}")
 
