@@ -6,7 +6,10 @@ import threading
 from typing import Dict
 from transformers import AutoModelForCausalLM, AutoTokenizer 
 
+# Suppress cuDNN/cuBLAS warnings and optimise GPU usage
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'max_split_size_mb:128' 
 
 # Model to be used
 model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
@@ -21,12 +24,13 @@ def update_elapsed_time(start_time, stop_event):
     while not stop_event.is_set():
         elapsed_time = time.time() - start_time
         minutes, seconds = divmod(elapsed_time, 60)
-        sys.stdout.write(f"\n\rTime Elapsed: {int(minutes):02}:{int(seconds):02}")
+        sys.stdout.write(f"\rTime Elapsed: {int(minutes):02}:{int(seconds):02}")
         sys.stdout.flush()
         time.sleep(1)
 
 
 
+torch.cuda.empty_cache()
 def load_model():
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model...\n")
     start_time = time.time()
