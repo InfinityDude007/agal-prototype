@@ -1,4 +1,5 @@
-numpy
 torch
+numpy
+pydantic
 transformers
 numpy_financial
