@@ -14,5 +14,5 @@ class GeneratedPrompt(BaseModel):
 
 
 class ModelResponse(BaseModel):
-    response: set
+    response: str
     time_elapsed: float
