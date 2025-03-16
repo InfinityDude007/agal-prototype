@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import torch
@@ -5,7 +6,7 @@ import threading
 from typing import Dict
 from transformers import AutoModelForCausalLM, AutoTokenizer 
 
-
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # Model to be used
 model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
@@ -16,26 +17,25 @@ temp_config = 0.6
 
 
 
-def update_elapsed_time(start_time):
-    while True:
+def update_elapsed_time(start_time, stop_event):
+    while not stop_event.is_set():
         elapsed_time = time.time() - start_time
         minutes, seconds = divmod(elapsed_time, 60)
-        sys.stdout.write(f"\rTime Elapsed: {int(minutes):02}:{int(seconds):02}")
+        sys.stdout.write(f"\n\rTime Elapsed: {int(minutes):02}:{int(seconds):02}")
         sys.stdout.flush()
         time.sleep(1)
 
 
 
 def load_model():
-    
     print(f"\nModel: {model_name.split('/')[1]}\nLoading model...\n")
-
     start_time = time.time()
 
-    elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time,))
+    stop_event = threading.Event()
+    elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time, stop_event))
     elapsed_time_thread.daemon = True
     elapsed_time_thread.start()
-    
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     tokenizer = AutoTokenizer.from_pretrained(model_name)   
     model = AutoModelForCausalLM.from_pretrained(
@@ -44,6 +44,7 @@ def load_model():
         device_map="auto"
     ).to(device)
 
+    stop_event.set()
     elapsed_time_thread.join()
 
     return tokenizer, model, device
@@ -86,15 +87,14 @@ def generate_prompt(details: Dict[str, str]) -> str:
 
 
 def call_llm(prompt: str) -> str:
-    
     print("Awaiting model response...\n")
-
     start_time = time.time()
 
-    elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time,))
+    stop_event = threading.Event()
+    elapsed_time_thread = threading.Thread(target=update_elapsed_time, args=(start_time, stop_event))
     elapsed_time_thread.daemon = True
     elapsed_time_thread.start()
-    
+
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     response = model.generate(
         **inputs, 
@@ -103,6 +103,7 @@ def call_llm(prompt: str) -> str:
         pad_token_id=tokenizer.eos_token_id
     )
 
+    stop_event.set()
     elapsed_time_thread.join()
 
     return tokenizer.decode(response[0], skip_special_tokens=True), time.time() - start_time
