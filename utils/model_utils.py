@@ -27,7 +27,7 @@ model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
 
 
 # Set max tokens and model temperature
-tokens_config = 1200
+tokens_config = 1500
 temp_config = 0.6
 
 
@@ -72,7 +72,7 @@ def load_model():
     elapsed_time_thread.join()
     
     elapsed_time = (time.time() - start_time) - 1
-    print(f"\n\nModel: {model_name.split('/')[1]}\nLoaded model on {device.upper()} ✅\n")
+    print(f"\n\n\nModel: {model_name.split('/')[1]}\nLoaded model on {device.upper()} ✅\n")
     minutes, seconds = divmod(elapsed_time, 60)
     sys.stdout.write(f"\rTime to Load: {int(minutes):02}:{int(seconds):02}")
 

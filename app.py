@@ -7,7 +7,7 @@ from utils.model_utils import get_details, generate_prompt, call_llm, model_resp
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
 
-print("\n\n---- AGAL Initial Prototype ----\n\n")
+print("\n\n\n---- AGAL Initial Prototype ----\n\n")
 
 
 """
