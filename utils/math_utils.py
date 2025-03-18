@@ -1,20 +1,22 @@
 import numpy as np
-from numpy_financial import irr
+import numpy_financial as npf
 
 
 ###########################################################################################################################################################################################################################################
 
 
 def calculate_npv(discount_rate, cash_flows):
-    npv = np.npv(discount_rate, cash_flows[1:]) + cash_flows[0]
-    return npv
+    npv = npf.npv(discount_rate, cash_flows)
+    return int(npv)
 
 
 ###########################################################################################################################################################################################################################################
 
 
 def calculate_irr(cash_flows):
-    return irr(cash_flows) 
+    irr = np.round(npf.irr(cash_flows), 2)
+    irr_as_percentage = irr * 100
+    return int(irr_as_percentage)
 
 
 ###########################################################################################################################################################################################################################################
@@ -25,7 +27,7 @@ def calculate_payback_period(initial_investment, cash_flows):
     for i, cf in enumerate(cash_flows, 1):
         cumulative += cf
         if cumulative >= initial_investment:
-            return i - 1 + (initial_investment - (cumulative - cf)) / cf
+            return np.round((i - 1 + (initial_investment - (cumulative - cf)) / cf), 9)
     
     return None
 
@@ -33,7 +35,7 @@ def calculate_payback_period(initial_investment, cash_flows):
 ###########################################################################################################################################################################################################################################
 
 
-def discounted_payback_period(cash_flows, initial_investment, discount_rate=0.08):
+def discounted_payback_period(initial_investment, cash_flows, discount_rate):
     discounted_cash_flows = [cf / (1 + discount_rate) ** i for i, cf in enumerate(cash_flows, 1)]
     cumulative = 0
     discounted_payback = 0
@@ -44,22 +46,22 @@ def discounted_payback_period(cash_flows, initial_investment, discount_rate=0.08
             discounted_payback = i - 1 + (initial_investment - (cumulative - dcf)) / dcf
             break
 
-    return round(discounted_payback, 2)
+    return round(discounted_payback, 9)
 
 
 ###########################################################################################################################################################################################################################################
 
 
-def npv_analysis(cash_flows, initial_investment, discount_rate=0.08, capex_increase=1.2):
-    capex_pessimistic = initial_investment * capex_increase
-    npv_pessimistic = np.npv(discount_rate, cash_flows[1:]) - capex_pessimistic
-    return round(npv_pessimistic, 2)
+def npv_analysis(cash_flows, initial_investment, discount_rate, capex_increase):
+    capex = initial_investment * capex_increase
+    npv = npf.npv(discount_rate, cash_flows[1:]) - capex
+    return round(npv, 2)
 
 
 ###########################################################################################################################################################################################################################################
 
 
-def profitability_index(cash_flows, initial_investment, discount_rate=0.08):
-    pv_future_cash = np.npv(discount_rate, cash_flows)
-    pi = pv_future_cash / abs(initial_investment)
-    return round(pi, 2)
+def profitability_index(initial_investment, cash_flows, discount_rate):
+    pv_future_cash = calculate_npv(discount_rate, cash_flows) + abs(initial_investment)
+    pi = int(pv_future_cash) / abs(initial_investment)
+    return np.round(pi, 2)
