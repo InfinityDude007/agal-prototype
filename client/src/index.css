@@ -1,0 +1,117 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background: #edfdec;
+    /* #f6fbf6 */
+    color: #091108;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    gap: 20px;
+}
+
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    gap: 20px;
+    font-size: 40px;
+}
+
+img {
+    height: 8vh;
+}
+
+button {
+    color: #091108;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 100px;
+    height: 45px;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: 30px;
+}
+
+button:hover {
+    color: #091108;
+}
+
+.getRes {
+    background-color: #9adb95;
+}
+
+.getRes:hover {
+    background-color: #51b849;
+    box-shadow: 0 4px 20px #6fd267;
+}
+
+.clearRes {
+    background-color: #f54d4a;
+}
+
+.clearRes:hover {
+    background-color: #f6211d;
+    box-shadow: 0 4px 20px #ff7b79;
+}
+
+.resBlock {
+    border: 2px solid #51b849;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    padding: 20px;
+    min-width: 330px;
+    gap: 10px;
+}
+
+.resBlock span {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    max-width: fit-content;
+}
+
+.resBlock-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    justify-content: center;
+}
+
+.resBlock-grid .label {
+    text-align: right;
+    justify-self: start;
+}
+
+.resBlock-grid .value {
+    text-align: left;
+    justify-self: end;
+}
+
+.buttonGroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    gap: 25px;
+}
