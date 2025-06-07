@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+*.pid
+*.db
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# Environment and local secrets
+.env
+.env.*
+settings_local.py
+
+# Build artifacts & test cache
+build/
+dist/
+*.egg-info/
+.cache/
+.pytest_cache/
+.pyre/
+*.cover
+coverage.xml
+.coverage
+
+# React.js
+client/node_modules/
+client/.vite/
+client/.cache/
+client/dist/
+client/build/
+client/.env
+client/.env.*
+client/npm-debug.log*
+
+# Docker
+.docker/
+docker-compose.override.yml
+**/docker-compose.override.yml
+
+# Docker-specific Python cache
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+
+# PostgreSQL
+*.dump
+*.sql
+pgdata/
+
+# Nginx
+nginx/logs/
+nginx/conf.d/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+*.swp
+*~
+*.bak
+*.tmp
+
+# General files
+*.tmp
+*.bak
+*.swp
+*.swo
+commands.txt
