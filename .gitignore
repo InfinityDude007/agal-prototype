@@ -14,7 +14,6 @@ ENV/
 
 # Environment and local secrets
 .env
-.env.*
 settings_local.py
 
 # Build artifacts & test cache
