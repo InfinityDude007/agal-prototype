@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-if (!import.meta.env.DEV_MODE) {
+if (!import.meta.env.VITE_DEV_MODE) {
     console.log = () => {};
     console.warn = () => {};
     console.info = () => {};
