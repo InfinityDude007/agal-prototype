@@ -8,3 +8,4 @@ pandas
 matplotlib
 tzlocal
 dotenv
+httpx
