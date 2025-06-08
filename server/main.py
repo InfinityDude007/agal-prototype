@@ -3,9 +3,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
-from utils.time import get_local_timestamp
+from utils import get_local_timestamp
 from dotenv import load_dotenv
 import os
+from routes import main_router
 
 load_dotenv()
 
@@ -14,6 +15,8 @@ load_dotenv()
 # --- FastAPI and CORS config ---
 
 app = FastAPI(root_path="/api")
+
+app.include_router(main_router)
 
 origins = [
     "http://localhost:5173"
