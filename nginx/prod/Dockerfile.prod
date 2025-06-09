@@ -1,8 +1,0 @@
-FROM nginx:alpine
-
-COPY ./prod/nginx.conf.prod.template /etc/nginx/nginx.conf.template
-COPY ./prod/entrypoint.prod.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
