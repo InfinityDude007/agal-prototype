@@ -18,7 +18,7 @@ html, body {
     justify-content: center;
     align-items: center;
     vertical-align: middle;
-    gap: 20px;
+    padding-bottom: 10vh;
 }
 
 h1 {
@@ -34,44 +34,49 @@ img {
     height: 8vh;
 }
 
-button {
-    color: #091108;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 100px;
-    height: 45px;
-    font-weight: bold;
-    transition: 0.3s;
-    margin-top: 30px;
-}
-
-button:hover {
-    color: #091108;
-}
-
 .getRes {
-    background-color: #9adb95;
-}
-
-.getRes:hover {
-    background-color: #51b849;
-    box-shadow: 0 4px 20px #6fd267;
+    background-color: transparent;
+    border: 3px solid #9adb95;
+    color: #091108;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px #0000004d;
+    width: 100px;
+    height: 50px;
+    font-weight: bold;
+    transition: all 0.4s;
 }
 
 .clearRes {
-    background-color: #f54d4a;
+    background-color: transparent;
+    border: 3px solid #f54d4a;
+    color: #091108;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px #0000004d;
+    width: 100px;
+    height: 50px;
+    font-weight: bold;
+    transition: all 0.4s;
+}
+
+.getRes:hover {
+    border: 3px solid #51b849;
+    background-color: #6fd26730;
+    box-shadow: 0 4px 20px #6fd267;
+    color: #091108;
 }
 
 .clearRes:hover {
-    background-color: #f6211d;
+    border: 3px solid #f6211d;
+    background-color: #ff7b7930;
     box-shadow: 0 4px 20px #ff7b79;
+    color: #091108;
 }
 
 .resBlock {
     border: 2px solid #51b849;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px #0000004d;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
@@ -80,6 +85,7 @@ button:hover {
     vertical-align: middle;
     padding: 20px;
     min-width: 330px;
+    max-width: 100vh;
     gap: 10px;
 }
 
