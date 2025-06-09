@@ -15,12 +15,10 @@ load_dotenv()
 # --- FastAPI and CORS config ---
 
 app = FastAPI(root_path="/api")
-
 app.include_router(main_router)
 
-origins = [
-    "http://localhost:5173"
-]
+origins = os.getenv("CORS_ORIGINS", "").split(",")
+origins = [origin for origin in origins if origin]
 
 app.add_middleware(
     CORSMiddleware,
