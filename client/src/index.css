@@ -349,3 +349,30 @@ img {
         left: unset;
     }
 }
+
+.markdown-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    background: #fff;
+    font-size: 1rem;
+    box-shadow: 0 1px 4px rgba(40,150,40,0.08);
+}
+
+.markdown-table th,
+.markdown-table td {
+    border: 1px solid #b7e3bc;
+    padding: 0.75em 1em;
+    text-align: left;
+    min-width: 120px;
+    vertical-align: top;
+}
+
+.markdown-table th {
+    background: #e5faeb;
+    font-weight: bold;
+}
+
+.markdown-table tr:nth-child(even) td {
+    background: #f7fdf9;
+}
