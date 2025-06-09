@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import './App.css'
+import remarkGfm from 'remark-gfm';
+import './App.css';
 import api from './utils/api.js';
 
 
@@ -254,7 +255,12 @@ function App() {
 			{modelRes && (
 				<div className="resBlock-model">			
 					<span className="value">
-						<ReactMarkdown>
+						<ReactMarkdown
+							remarkPlugins={[remarkGfm]}
+							components={{
+								table: ({node, ...props}) => <table className="markdown-table" {...props} />,
+							}}
+						>
 							{modelRes}
 						</ReactMarkdown>
 					</span>
