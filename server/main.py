@@ -3,10 +3,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
-from utils import get_local_timestamp
+from server.utils import get_local_timestamp
 from dotenv import load_dotenv
 import os
-from routes import main_router
+from server.routes import main_router
 
 load_dotenv()
 

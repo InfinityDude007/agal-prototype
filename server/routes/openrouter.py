@@ -3,8 +3,8 @@ import httpx
 from dotenv import load_dotenv
 import os
 import time
-from utils import sanitize_md
-from models import ProjectDetailsReq, ProjectDetailsRes, GenericError
+from server.utils import sanitize_md
+from server.models import ProjectDetailsReq, ProjectDetailsRes, GenericError
 
 load_dotenv()
 

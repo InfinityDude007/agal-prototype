@@ -1,2 +1,2 @@
-from .time import get_local_timestamp
-from .sanitize_md import sanitize_md
+from utils.time import get_local_timestamp
+from utils.sanitize_md import sanitize_md
