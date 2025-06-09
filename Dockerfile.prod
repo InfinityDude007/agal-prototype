@@ -26,13 +26,17 @@ COPY ./server .
 
 
 
-# Runtime Image, Nginx Reverse Proxy and tini as process manager
-FROM nginx:alpine
+# Runtime Image, Nginx Reverse Proxy and Uvicorn
+FROM python:3.11-slim
 
-COPY --from=client-builder /client/dist /usr/share/nginx/html
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    pip install uvicorn && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=server-builder /server /app/server
-
-RUN apk add --no-cache tini
+COPY --from=client-builder /client/dist /usr/share/nginx/html
 
 COPY ./nginx/prod/nginx.conf.prod.template /etc/nginx/nginx.conf.template
 COPY ./nginx/prod/entrypoint.prod.sh /entrypoint.sh
@@ -43,4 +47,4 @@ WORKDIR /app
 
 EXPOSE 80 8000
 
-ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
