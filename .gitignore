@@ -79,3 +79,7 @@ Icon?
 *.swp
 *.swo
 commands.txt
+
+# Server Keys
+*.pub
+agal_vm_key
