@@ -20,7 +20,35 @@ async def query_model(details: ProjectDetailsReq):
 
 
     # Setup model prompt from skeleton prompt and user details
-    prompt = f"""<think>Analyze the feasibility of a project to {details.project_type} in the {details.company_industry} industry with an investment of {details.investment} in {details.countries}, aiming to {details.project_goal}. Provide a structured summary of key considerations, risks, and opportunities. Ensure a balanced, high-level preliminary analysis rather than an overly detailed breakdown of any single factor. You may reference any financials provided within the prompt, and use actual numerical values and financial data where appropriate. Avoid unnecessary repetition of this prompt’s details unless required for clarity. Please reason step by step, and put your final answer in markdown (md) format only.</think>"""
+    prompt = f"""
+        You are a professional financial analyst. Write a detailed markdown report evaluating the viability of a project based on the inputs below. The tone should match that of a corporate finance feasibility report for senior executives (similar to McKinsey, PwC, or MNC internal reporting). The output must include clear headings and structured analysis.
+        
+        ---
+        
+        Project Input
+        - Project Type: {details.project_type}
+        - Project Goal: {details.project_goal}
+        - Industry: {details.company_industry}
+        - Investment Amount: {details.investment}
+        - Prospective Countries: {details.countries}
+        
+        ---
+        
+        Output Requirements:
+        1. Title: "Project Viability Analysis: [rephrase of project_type + industry]"
+        2. Executive Summary: Summarize key findings, most viable country, and recommendation.
+        3. Introduction: Expand the project context and strategic goal.
+        4. Methodology: State financial assumptions (e.g., CAGR, labour cost, government incentives) and analysis methods (e.g., geographical, tax, risk).
+        5. Key Considerations (format with markdown tables):
+            - Geographical Advantages
+            - Tax Considerations
+            - Market Demand
+            - Economic Factors
+        6. Sensitivity Analysis: Briefly assess 3–4 risks (e.g., supply chain, regulation, CAPEX) and possible mitigations.
+        7. Conclusion & Recommendations: Summarize findings and list 3–4 bullet-point action items.
+        
+        Use realistic numbers and economic reasoning. Prioritize depth over length where needed. Return a full markdown formatted response.
+    """
 
 
     # Setup headers and body for Openrouter call
