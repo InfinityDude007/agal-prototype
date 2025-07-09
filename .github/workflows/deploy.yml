@@ -4,7 +4,9 @@ name: Deploy to Ubuntu VM on GCP
 on:
     push:
         branches:
-            - main
+          - main
+        tags:
+          - '*'
 
 
 jobs:
