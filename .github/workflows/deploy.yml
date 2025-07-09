@@ -25,10 +25,7 @@ jobs:
             docker:
                 image: docker:dind
                 options: >-
-                    --privileged
-                    --env DOCKER_TLS_CERTDIR=
-                    ports:
-                    - 2375:2375
+                    --privileged --env DOCKER_TLS_CERTDIR= --publish 2375:2375
 
         env:
             DOCKER_HOST: 'tcp://127.0.0.1:2375'
@@ -155,7 +152,7 @@ jobs:
             - name: Deploy and configure Docker on server
               run: |
                 ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} "
-                    cd /home/ubuntu/agal-prototype && docker-compose -p /home/ubuntu/agal-prototype -f docker-compose.yml down -v
-                    docker-compose -p /home/ubuntu/agal-prototype -f docker-compose.yml up -d
+                    cd /home/ubuntu/agal-prototype && docker-compose --env-file .env -p agal-prototype down -v
+                    docker-compose --env-file .env -p agal-prototype up -d --build
                     docker system prune --volumes --all --force
                 "
