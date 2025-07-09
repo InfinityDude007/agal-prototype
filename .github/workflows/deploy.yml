@@ -81,27 +81,27 @@ jobs:
             - name: Build and push Python Docker image to ghcr
               run: |
                 echo "Building Python image"
-                echo "Pushing ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-server:${{ github.sha }}"
+                echo "Pushing ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-server:${{ github.sha }}"
                 docker build --build-arg BACKEND_PORT=${{ secrets.BACKEND_PORT }} \
-                -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-server:${{ github.sha }} ./server
+                -t ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-server:${{ github.sha }} ./server
                 docker push ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-server:${{ github.sha }}
 
             - name: Build and push React.js Docker image to ghcr
               run: |
                 echo "Building React.js image"
-                echo "Pushing ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-client:${{ github.sha }}"
-                docker build --build-arg FRONTEND_PORT=${{ secrets.FRONTEND_PORT }} -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-client:${{ github.sha }} ./client
+                echo "Pushing ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-client:${{ github.sha }}"
+                docker build --build-arg FRONTEND_PORT=${{ secrets.FRONTEND_PORT }} -t ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-client:${{ github.sha }} ./client
                 docker push ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-client:${{ github.sha }}
 
             - name: Build and push Nginx Docker image to ghcr
               run: |
                 echo "Building Nginx image"
-                echo "Pushing ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-nginx:${{ github.sha }}"
+                echo "Pushing ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-nginx:${{ github.sha }}"
                 docker build \
                     --build-arg BACKEND_HOST=${{ secrets.BACKEND_HOST }} \
                     --build-arg FRONTEND_PORT=${{ secrets.FRONTEND_PORT }} \
                     --build-arg NGINX_PORT=${{ secrets.NGINX_PORT }} \
-                -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-nginx:${{ github.sha }} ./nginx
+                -t ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-nginx:${{ github.sha }} ./nginx
                 docker push ghcr.io/${{ github.repository_owner }}/${{ env.REPO_NAME }}-nginx:${{ github.sha }}
 
             - name: Clean up old images
