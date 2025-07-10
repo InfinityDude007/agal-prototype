@@ -157,6 +157,7 @@ jobs:
               run: |
                 ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} "
                     cd /home/ubuntu/agal-prototype && docker-compose --env-file .env -p agal-prototype down -v
-                    docker-compose --env-file .env -p agal-prototype up -d --build
+                    docker-compose --env-file .env -p agal-prototype pull
+                    docker-compose --env-file .env -p agal-prototype up -d
                     docker system prune --volumes --all --force
                 "
