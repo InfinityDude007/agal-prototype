@@ -12,9 +12,6 @@ services:
   client:
     image: ${CLIENT_IMAGE}
     container_name: ${CLIENT_CONTAINER_NAME}
-    volumes:
-      - ./client:/client
-      - /client/node_modules
     tty: true
     restart: always
     env_file:
