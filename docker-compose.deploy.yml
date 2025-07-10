@@ -1,0 +1,50 @@
+services:
+  server:
+    image: ${SERVER_IMAGE}
+    container_name: ${SERVER_CONTAINER_NAME}
+    tty: true
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - agal-prototype-network
+
+  client:
+    image: ${CLIENT_IMAGE}
+    container_name: ${CLIENT_CONTAINER_NAME}
+    volumes:
+      - ./client:/client
+      - /client/node_modules
+    tty: true
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - agal-prototype-network
+    depends_on:
+      - server
+
+  nginx:
+    image: ${NGINX_IMAGE}
+    container_name: ${NGINX_CONTAINER_NAME}
+    restart: always
+    environment:
+      - NGINX_FRONTEND_HOST=${NGINX_FRONTEND_HOST}
+      - NGINX_BACKEND_HOST=${NGINX_BACKEND_HOST}
+      - NGINX_FRONTEND_PORT=${FRONTEND_PORT}
+      - NGINX_BACKEND_PORT=${BACKEND_PORT}
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"
+    tty: true
+    networks:
+      - agal-prototype-network
+    depends_on:
+      - client
+
+networks:
+  agal-prototype-network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
