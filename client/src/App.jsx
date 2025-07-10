@@ -242,7 +242,7 @@ function App() {
 					<p className='loading-p'><strong>Generating Report</strong></p>
 					<TimeElapsed active={isUserSel && !modelRes} />
 					<p className='loading-p'><strong>Data:</strong> {inputFor}</p>
-					<div class="loader" />
+					<div className="loader" />
 				</>
 			)}
 			{modelRes && (
