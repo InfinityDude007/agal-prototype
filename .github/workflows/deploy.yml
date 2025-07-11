@@ -2,11 +2,16 @@ name: Deploy to Ubuntu VM on GCP
 
 
 on:
-    push:
-        branches:
-          - main
-        tags:
-          - '*'
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
 
 jobs:
