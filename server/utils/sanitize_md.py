@@ -13,6 +13,8 @@ def sanitize_md(raw_content: str) -> str:
     raw_content = re.sub(r"^```markdown\s*", "", raw_content)
     raw_content = re.sub(r"^```\s*", "", raw_content)
     raw_content = re.sub(r"\n*```[\s]*$", "", raw_content)
+    raw_content = re.sub(r"<\/?center>", "", raw_content, flags=re.IGNORECASE)
+    raw_content = re.sub(r"\n{3,}", "\n\n", raw_content)
 
     raw_content = raw_content.replace("\\n", "\n")
 
