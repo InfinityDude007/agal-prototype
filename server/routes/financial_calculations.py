@@ -5,7 +5,7 @@ from models import FinancialDetailsReq, NPVResult, SensitivityScenarios, Financi
 router = APIRouter()
 
 
-@router.post("/calculate-financials", response_model=FinancialDetailsRes, responses={400: {"model": GenericError}, 502: {"model": GenericError}})
+@router.post("/calculate-financials", response_model=FinancialDetailsRes)
 async def calculate_financials(data: FinancialDetailsReq):
     
     # Baseline Values
